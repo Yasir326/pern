@@ -4,7 +4,7 @@
 This is a web app made for `Decibel Studios` in order for customers to book sessions and sessions for admins to be able to log in and modify settings and booking.
 
 ## Stack
-This Web app is built using [Typescriot](https://www.typescriptlang.org/) and the `PERN` stack which consits of [PostgresSQL](https://www.postgresql.org/), [Express](https://expressjs.com/), [React](https://reactjs.org/) and [Node](https://nodejs.org/en/)
+This Web app is built using [Typescript](https://www.typescriptlang.org/) and the `PERN` stack which consists of [PostgresSQL](https://www.postgresql.org/), [Express](https://expressjs.com/), [React](https://reactjs.org/) and [Node](https://nodejs.org/en/)
 
 ## Getting Started 🏁
 
