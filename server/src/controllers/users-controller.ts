@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { getUsers, getUserById, createUser } from '../services/users-service';
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  deleteUser
+} from '../services/users-service';
 import { QueryResult } from 'pg';
 
 export const fetchUsers = async (
@@ -23,7 +28,6 @@ export const fetchUsersById = async (
   try {
     const id = parseInt(req.params.id);
     const user: QueryResult = await getUserById(id);
-    console.log(user);
     return res.status(200).json(user.rows);
   } catch (e: any) {
     console.error(e);
@@ -47,7 +51,6 @@ export const createNewUser = async (
     }
 
     const user: QueryResult = await createUser(firstName, lastName, email);
-    console.log(user);
     return res.status(200).json({
       message: 'User created successfully',
       body: {
@@ -58,6 +61,25 @@ export const createNewUser = async (
         }
       }
     });
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).json('Internal Server Error');
+  }
+};
+
+export const removeUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const id = parseInt(req.params.id);
+    if (!id) {
+      return res.status(400).json('Need to pass in a valid id');
+    }
+
+    const response: QueryResult = await deleteUser(id);
+    console.log(response);
+    return res.status(203).json('User successfully deleted');
   } catch (e: any) {
     console.error(e);
     return res.status(500).json('Internal Server Error');
