@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express';
 import {getHome} from '../controllers/home-controller';
-import {fetchUsers, fetchUsersById, createNewUser, removeUser} from '../controllers/users-controller'
+import {getUsers, getUsersById, createNewUser, deleteUser, updateUser} from '../controllers/users-controller'
 
 const router = express.Router();
 
@@ -9,9 +9,10 @@ router.get('/', (req: Request, res: Response) => {
     res.send('Hello Dave')
 })
 router.get('/home', getHome);
-router.get('/users', fetchUsers)
-router.get('/users/:id', fetchUsersById)
+router.get('/users', getUsers)
+router.get('/users/:id', getUsersById)
 router.post('/users', createNewUser)
-router.delete('/users/:id', removeUser)
+router.delete('/users/:id', deleteUser)
+router.put('/users/:id', updateUser)
 
 export default router;

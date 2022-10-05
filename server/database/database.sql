@@ -13,3 +13,5 @@ INSERT INTO users (first_name, last_name, email)
 
 INSERT INTO users (first_name, last_name, email)
     VALUES('Yasir', 'Khan', 'yasir.khan@gmail.com');
+
+ALTER TABLE users ADD CONSTRAINT constraint_name UNIQUE (email);

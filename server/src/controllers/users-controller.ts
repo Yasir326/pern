@@ -1,18 +1,19 @@
 import { Request, Response } from 'express';
 import {
-  getUsers,
-  getUserById,
-  createUser,
-  deleteUser
+  getAll,
+  getById,
+  create,
+  deleteQuery,
+  update
 } from '../services/users-service';
 import { QueryResult } from 'pg';
 
-export const fetchUsers = async (
+export const getUsers = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const users: QueryResult = await getUsers();
+    const users: QueryResult = await getAll();
     console.log(users.rows);
     return res.status(200).json(users.rows);
   } catch (e: any) {
@@ -21,13 +22,13 @@ export const fetchUsers = async (
   }
 };
 
-export const fetchUsersById = async (
+export const getUsersById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const id = parseInt(req.params.id);
-    const user: QueryResult = await getUserById(id);
+    const user: QueryResult = await getById(id);
     return res.status(200).json(user.rows);
   } catch (e: any) {
     console.error(e);
@@ -50,7 +51,8 @@ export const createNewUser = async (
       res.status(400).json('Invalid email address');
     }
 
-    const user: QueryResult = await createUser(firstName, lastName, email);
+    await create(firstName, lastName, email);
+
     return res.status(200).json({
       message: 'User created successfully',
       body: {
@@ -63,11 +65,15 @@ export const createNewUser = async (
     });
   } catch (e: any) {
     console.error(e);
+    if (e.code == '23505') {
+      console.error(e.message);
+      return res.status(400).json('Email address already exists');
+    }
     return res.status(500).json('Internal Server Error');
   }
 };
 
-export const removeUser = async (
+export const deleteUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -77,9 +83,23 @@ export const removeUser = async (
       return res.status(400).json('Need to pass in a valid id');
     }
 
-    const response: QueryResult = await deleteUser(id);
-    console.log(response);
+    const response: QueryResult = await deleteQuery(id);
     return res.status(203).json('User successfully deleted');
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).json('Internal Server Error');
+  }
+};
+
+export const updateUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const id = parseInt(req.params.id);
+    const { firstName, lastName, email } = req.body;
+    await update(id, firstName, lastName, email);
+    return res.status(201).json('User successfully updated');
   } catch (e: any) {
     console.error(e);
     return res.status(500).json('Internal Server Error');
