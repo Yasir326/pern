@@ -6,6 +6,7 @@ import {
   deleteQuery,
   update
 } from '../services/users-service';
+import {validEmail } from '../common';
 import { QueryResult } from 'pg';
 
 export const getUsers = async (
@@ -48,7 +49,7 @@ export const createNewUser = async (
     }
 
     if (!validEmail(email)) {
-      res.status(400).json('Invalid email address');
+      return res.status(400).json('Invalid email address');
     }
 
     await create(firstName, lastName, email);
@@ -104,12 +105,4 @@ export const updateUser = async (
     console.error(e);
     return res.status(500).json('Internal Server Error');
   }
-};
-
-const validEmail = (email: string) => {
-  return email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
 };
